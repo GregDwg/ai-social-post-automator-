@@ -75,7 +75,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, genera
         case SocialPlatform.Facebook:
             return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
         case SocialPlatform.LinkedIn:
-            // LinkedIn's share URL doesn't support pre-filled text, so we copy it to the clipboard.
+            // LinkedIn's share URL doesn't support pre-filled text for the main share intent.
             return `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         case SocialPlatform.Threads:
             return `https://www.threads.net/intent/post?text=${encodeURIComponent(`${generatedPost}\n\n${article.url}`)}`;
@@ -84,11 +84,26 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, genera
     }
   };
 
-  const handleShareClick = async () => {
-    if (selectedPlatform === SocialPlatform.LinkedIn) {
-      await handleCopy();
+  const handleShare = async (url: string) => {
+    if (!generatedPost) return;
+    try {
+        await navigator.clipboard.writeText(generatedPost);
+        window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+        console.error("Failed to copy text for sharing: ", err);
+        alert("Could not copy text to clipboard. Please copy it manually and then open the link.");
     }
   };
+
+  const ShareButton: React.FC<{onClick: () => void, children: React.ReactNode}> = ({onClick, children}) => (
+     <button
+        onClick={onClick}
+        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-slate-800 dark:bg-slate-600 rounded-md hover:bg-slate-900 dark:hover:bg-slate-500 transition-colors"
+    >
+        <ShareIcon className="w-4 h-4" />
+        {children}
+    </button>
+  );
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-slate-700/50">
@@ -137,21 +152,53 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, genera
             <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg animate-fade-in">
                 <h4 className="font-semibold mb-2 text-slate-800 dark:text-slate-200">Generated Post:</h4>
                 <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{generatedPost}</p>
-                 <div className="mt-4 flex gap-2">
-                    <button onClick={handleCopy} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
-                        {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
-                        {copied ? 'Copied!' : 'Copy Text'}
-                    </button>
-                     <a 
-                        href={getShareUrl()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-slate-800 dark:bg-slate-600 rounded-md hover:bg-slate-900 dark:hover:bg-slate-500 transition-colors"
-                        onClick={handleShareClick}
-                    >
-                        <ShareIcon className="w-4 h-4" />
-                        Share on {selectedPlatform}
-                    </a>
+                 <div className="mt-4">
+                    <div className="flex gap-2">
+                      <button onClick={handleCopy} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
+                          {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
+                          {copied ? 'Copied!' : 'Copy Text'}
+                      </button>
+
+                      {(selectedPlatform === SocialPlatform.Twitter || selectedPlatform === SocialPlatform.Threads) && (
+                        <a 
+                          href={getShareUrl()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-slate-800 dark:bg-slate-600 rounded-md hover:bg-slate-900 dark:hover:bg-slate-500 transition-colors"
+                        >
+                          <ShareIcon className="w-4 h-4" />
+                          Share on {selectedPlatform}
+                        </a>
+                      )}
+                    </div>
+                     
+                    {selectedPlatform === SocialPlatform.LinkedIn && (
+                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-600">
+                        <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Post to LinkedIn (text will be copied):</p>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                           <ShareButton onClick={() => handleShare(getShareUrl())}>
+                             Personal Profile
+                           </ShareButton>
+                           <ShareButton onClick={() => handleShare('https://www.linkedin.com/company/107384792/admin/feed/posts/')}>
+                             DWG Company Page
+                           </ShareButton>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedPlatform === SocialPlatform.Facebook && (
+                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-600">
+                        <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Post to Facebook (text will be copied):</p>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <ShareButton onClick={() => handleShare('https://www.facebook.com/profile.php?id=61579317331199')}>
+                                IA Stratégie & Veille
+                            </ShareButton>
+                            <ShareButton onClick={() => handleShare('https://www.facebook.com/profile.php?id=61579297206438')}>
+                                IA & Business
+                            </ShareButton>
+                        </div>
+                      </div>
+                    )}
                  </div>
             </div>
         )}
