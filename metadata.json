@@ -1,0 +1,5 @@
+{
+  "name": "AI Blog Social Post Automator",
+  "description": "An application to help AI bloggers automate their social media posts. Upload a JSON file with article details, and use Gemini to generate engaging social media content for various platforms, complete with the article's cover image.",
+  "requestFramePermissions": []
+}
