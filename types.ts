@@ -2,7 +2,7 @@
 export interface Article {
   title: string;
   url: string;
-  imageUrl?: string;
+  imageBase64?: string;
   summary?: string;
 }
 

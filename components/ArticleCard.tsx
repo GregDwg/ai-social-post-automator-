@@ -39,7 +39,9 @@ const SocialButton: React.FC<{ platform: SocialPlatform, selected: boolean, onCl
 const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, generatedPost, onGenerate }) => {
   const [selectedPlatform, setSelectedPlatform] = useState<SocialPlatform>(SocialPlatform.Twitter);
   const [copied, setCopied] = useState(false);
-  const imageUrl = article.imageUrl || `https://picsum.photos/seed/${encodeURIComponent(article.title)}/1200/630`;
+  const imageUrl = article.imageBase64
+    ? `data:image/jpeg;base64,${article.imageBase64}`
+    : `https://picsum.photos/seed/${encodeURIComponent(article.title)}/1200/630`;
 
   const handleGenerateClick = () => {
     onGenerate(article, selectedPlatform);
