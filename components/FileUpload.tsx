@@ -81,7 +81,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, setError }) => {
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className={`relative flex flex-col items-center justify-center w-full p-12 border-2 border-dashed rounded-xl transition-all duration-300 ${isDragging ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800'}`}
+            className={`relative flex flex-col items-center justify-center w-full p-12 border-2 border-dashed rounded-xl transition-all duration-300 ${isDragging ? 'border-brand bg-brand/10 dark:bg-brand/20' : 'border-background-subtle dark:border-dark-border bg-background-alt dark:bg-dark-background-alt'}`}
         >
             <input
                 id="file-upload"
@@ -91,11 +91,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, setError }) => {
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
             <div className="text-center">
-                <UploadIcon className="mx-auto h-12 w-12 text-slate-400" />
-                <p className="mt-5 text-lg font-semibold text-slate-700 dark:text-slate-200">
-                    <span className="text-indigo-600 dark:text-indigo-400">Upload a file</span> or drag and drop
+                <UploadIcon className="mx-auto h-12 w-12 text-body/50" />
+                <p className="mt-5 text-lg font-semibold text-body dark:text-dark-body">
+                    <span className="text-brand">Upload a file</span> or drag and drop
                 </p>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">JSON file with your article list</p>
+                <p className="mt-1 text-sm text-body/80 dark:text-dark-body/80">JSON file with your article list</p>
             </div>
         </div>
     </div>

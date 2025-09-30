@@ -43,17 +43,17 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-background dark:bg-dark-background text-body dark:text-dark-body font-sans p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center pb-8 border-b border-slate-200 dark:border-slate-700">
+        <header className="flex justify-between items-center pb-8 border-b border-background-subtle dark:border-dark-border">
           <div className="flex items-center gap-4">
             <Logo />
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">AI Social Post Automator</h1>
-              <p className="text-slate-500 dark:text-slate-400">Generate social media posts for your blog articles instantly.</p>
+              <h1 className="text-2xl font-bold text-heading dark:text-dark-heading">AI Social Post Automator</h1>
+              <p className="text-body dark:text-dark-body">Generate social media posts for your blog articles instantly.</p>
             </div>
           </div>
-          <a href="https://github.com/google-gemini-v2" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 transition-colors">
+          <a href="https://github.com/google-gemini-v2" target="_blank" rel="noopener noreferrer" className="text-body/70 hover:text-body dark:text-dark-body/70 dark:hover:text-dark-body transition-colors">
             <GithubIcon className="w-6 h-6" />
           </a>
         </header>
@@ -64,10 +64,10 @@ export default function App() {
           ) : (
              <div className="max-w-md mx-auto">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Your Article</h2>
+                <h2 className="text-xl font-semibold text-heading dark:text-dark-heading">Your Article</h2>
                 <button
                   onClick={clearArticle}
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-all"
+                  className="px-4 py-2 text-sm font-medium text-white bg-brand rounded-lg hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand dark:focus:ring-offset-dark-background transition-all"
                 >
                   Process New Article
                 </button>
@@ -83,7 +83,7 @@ export default function App() {
           )}
 
           {error && (
-            <div className="mt-6 p-4 max-w-2xl mx-auto bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg" role="alert">
+            <div className="mt-6 p-4 max-w-2xl mx-auto bg-red-100 dark:bg-red-500/10 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg" role="alert">
               <p className="font-bold">An Error Occurred</p>
               <p>{error}</p>
             </div>

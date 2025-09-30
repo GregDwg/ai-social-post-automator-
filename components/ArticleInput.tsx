@@ -80,17 +80,17 @@ const ArticleInput: React.FC<ArticleInputProps> = ({ onArticleSubmit, setError }
 
 
   return (
-    <div className="max-w-2xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-xl shadow-md">
+    <div className="max-w-2xl mx-auto bg-background-alt dark:bg-dark-background-alt p-8 rounded-xl shadow-sm">
         <form onSubmit={handleSubmit}>
             <div className="space-y-6">
                 <div>
-                    <label htmlFor="json-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label htmlFor="json-input" className="block text-sm font-medium text-body dark:text-dark-body mb-2">
                         Paste Article JSON
                     </label>
                     <textarea
                         id="json-input"
                         rows={5}
-                        className="w-full p-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full p-3 bg-background dark:bg-dark-background border border-background-subtle dark:border-dark-border rounded-md focus:ring-brand focus:border-brand transition-colors text-body dark:text-dark-body"
                         placeholder='{ "title": "My Awesome AI Article", "url": "https://example.com/my-article", "summary": "A short summary..." }'
                         value={jsonInput}
                         onChange={(e) => setJsonInput(e.target.value)}
@@ -100,18 +100,18 @@ const ArticleInput: React.FC<ArticleInputProps> = ({ onArticleSubmit, setError }
                 </div>
 
                 <div>
-                    <label htmlFor="image-upload" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label htmlFor="image-upload" className="block text-sm font-medium text-body dark:text-dark-body mb-2">
                         Upload Cover Image (Optional)
                     </label>
                     <div className="mt-1 flex items-center gap-4">
-                        <div className="flex-shrink-0 h-24 w-48 bg-slate-100 dark:bg-slate-700 rounded-md flex items-center justify-center overflow-hidden">
+                        <div className="flex-shrink-0 h-24 w-48 bg-background-secondary dark:bg-dark-background rounded-md flex items-center justify-center overflow-hidden">
                             {imagePreview ? (
                                 <img src={imagePreview} alt="Image Preview" className="h-full w-full object-cover" />
                             ) : (
-                                <ImageIcon className="h-10 w-10 text-slate-400" aria-hidden="true" />
+                                <ImageIcon className="h-10 w-10 text-body/50" aria-hidden="true" />
                             )}
                         </div>
-                        <label htmlFor="image-upload" className="cursor-pointer bg-white dark:bg-slate-700 py-2 px-3 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm text-sm leading-4 font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                        <label htmlFor="image-upload" className="cursor-pointer bg-background dark:bg-dark-background-alt py-2 px-3 border border-background-subtle dark:border-dark-border rounded-md shadow-sm text-sm leading-4 font-medium text-body dark:text-dark-body hover:bg-background-secondary dark:hover:bg-dark-background focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-brand">
                             <span>{imageFile ? 'Change Image' : 'Select Image'}</span>
                             <input id="image-upload" name="image-upload" type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
                         </label>
@@ -119,10 +119,10 @@ const ArticleInput: React.FC<ArticleInputProps> = ({ onArticleSubmit, setError }
                 </div>
             </div>
 
-            <div className="mt-8 border-t border-slate-200 dark:border-slate-700 pt-6">
+            <div className="mt-8 border-t border-background-subtle dark:border-dark-border pt-6">
                 <button
                     type="submit"
-                    className="w-full px-4 py-3 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-800 transition-all"
+                    className="w-full px-4 py-3 text-sm font-semibold text-white bg-brand rounded-lg hover:bg-brand-hover disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand dark:focus:ring-offset-dark-background-alt transition-all"
                 >
                     Process Article
                 </button>
