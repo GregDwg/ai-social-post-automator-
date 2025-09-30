@@ -1,11 +1,12 @@
-
 import React, { useState } from 'react';
 import { Article, SocialPlatform } from '../types';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { LinkedInIcon } from './icons/LinkedInIcon';
 import { FacebookIcon } from './icons/FacebookIcon';
+import { ThreadsIcon } from './icons/ThreadsIcon';
 import { CopyIcon } from './icons/CopyIcon';
 import { CheckIcon } from './icons/CheckIcon';
+import { ShareIcon } from './icons/ShareIcon';
 
 interface ArticleCardProps {
   article: Article;
@@ -19,6 +20,7 @@ const SocialButton: React.FC<{ platform: SocialPlatform, selected: boolean, onCl
         [SocialPlatform.Twitter]: <TwitterIcon className="w-5 h-5" />,
         [SocialPlatform.LinkedIn]: <LinkedInIcon className="w-5 h-5" />,
         [SocialPlatform.Facebook]: <FacebookIcon className="w-5 h-5" />,
+        [SocialPlatform.Threads]: <ThreadsIcon className="w-5 h-5" />,
     };
 
     return (
@@ -29,6 +31,7 @@ const SocialButton: React.FC<{ platform: SocialPlatform, selected: boolean, onCl
                 ${selected ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'}
                 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
             `}
+            aria-pressed={selected}
         >
             {icons[platform]}
             {platform}
@@ -47,13 +50,45 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, genera
     onGenerate(article, selectedPlatform);
   };
   
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (generatedPost) {
-        navigator.clipboard.writeText(generatedPost);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        try {
+            await navigator.clipboard.writeText(generatedPost);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error("Failed to copy text: ", err);
+            alert("Could not copy text to clipboard. Your browser might not have permission or focus. Please copy manually.");
+        }
     }
   }
+  
+  const getShareUrl = () => {
+    if (!generatedPost) return '#';
+    
+    const encodedUrl = encodeURIComponent(article.url);
+    const encodedText = encodeURIComponent(generatedPost);
+
+    switch (selectedPlatform) {
+        case SocialPlatform.Twitter:
+            return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+        case SocialPlatform.Facebook:
+            return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+        case SocialPlatform.LinkedIn:
+            // LinkedIn's share URL doesn't support pre-filled text, so we copy it to the clipboard.
+            return `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+        case SocialPlatform.Threads:
+            return `https://www.threads.net/intent/post?text=${encodeURIComponent(`${generatedPost}\n\n${article.url}`)}`;
+        default:
+            return '#';
+    }
+  };
+
+  const handleShareClick = async () => {
+    if (selectedPlatform === SocialPlatform.LinkedIn) {
+      await handleCopy();
+    }
+  };
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-slate-700/50">
@@ -102,10 +137,22 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isGenerating, genera
             <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg animate-fade-in">
                 <h4 className="font-semibold mb-2 text-slate-800 dark:text-slate-200">Generated Post:</h4>
                 <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{generatedPost}</p>
-                 <button onClick={handleCopy} className="mt-4 w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
-                    {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
-                    {copied ? 'Copied!' : 'Copy Text'}
-                </button>
+                 <div className="mt-4 flex gap-2">
+                    <button onClick={handleCopy} className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
+                        {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
+                        {copied ? 'Copied!' : 'Copy Text'}
+                    </button>
+                     <a 
+                        href={getShareUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-slate-800 dark:bg-slate-600 rounded-md hover:bg-slate-900 dark:hover:bg-slate-500 transition-colors"
+                        onClick={handleShareClick}
+                    >
+                        <ShareIcon className="w-4 h-4" />
+                        Share on {selectedPlatform}
+                    </a>
+                 </div>
             </div>
         )}
       </div>

@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { Article, SocialPlatform } from '../types';
 
@@ -19,6 +18,9 @@ function constructPrompt(article: Article, platform: SocialPlatform): string {
       break;
     case SocialPlatform.Facebook:
       platformSpecifics = 'The post should be friendly and conversational. Use a mix of statements and questions to encourage comments and shares. Include 2-4 relevant hashtags.';
+      break;
+    case SocialPlatform.Threads:
+      platformSpecifics = 'The post can be up to 500 characters. The tone should be conversational and authentic. Feel free to use relevant hashtags and ask questions to start a conversation.';
       break;
   }
 

@@ -1,4 +1,3 @@
-
 export interface Article {
   title: string;
   url: string;
@@ -10,4 +9,5 @@ export enum SocialPlatform {
   Twitter = 'Twitter',
   LinkedIn = 'LinkedIn',
   Facebook = 'Facebook',
+  Threads = 'Threads',
 }
